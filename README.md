@@ -3,7 +3,7 @@
 [![Latest Stable Version](https://poser.pugx.org/datalogix/laravel-translation/version)](https://packagist.org/packages/datalogix/laravel-translation)
 [![Total Downloads](https://poser.pugx.org/datalogix/laravel-translation/downloads)](https://packagist.org/packages/datalogix/laravel-translation)
 [![tests](https://github.com/datalogix/laravel-translation/workflows/tests/badge.svg)](https://github.com/datalogix/laravel-translation/actions)
-[![StyleCI](https://github.styleci.io/repos/418647775/shield?style=flat)](https://github.styleci.io/repos/418647775)
+[![StyleCI](https://github.styleci.io/repos/418695011/shield?style=flat)](https://github.styleci.io/repos/418695011)
 [![codecov](https://codecov.io/gh/datalogix/laravel-translation/branch/main/graph/badge.svg)](https://codecov.io/gh/datalogix/laravel-translation)
 [![License](https://poser.pugx.org/datalogix/laravel-translation/license)](https://packagist.org/packages/datalogix/laravel-translation)
 
