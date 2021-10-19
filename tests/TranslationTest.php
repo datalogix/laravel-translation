@@ -11,5 +11,6 @@ class TranslationTest extends TestCase
         $t->addPath(__DIR__.'/new-path2', false);
 
         $this->assertEquals($t->getLoader()->paths(), [__DIR__.'/new-path1', __DIR__.'/new-path2']);
+        $this->assertEquals($t->getLoader()->jsonPaths(), [__DIR__.'/new-path1']);
     }
 }

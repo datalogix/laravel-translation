@@ -21,4 +21,11 @@ interface Loader extends BaseLoader
      * @return array
      */
     public function paths();
+
+    /**
+     * Get an array of all the registered paths to JSON translation files.
+     *
+     * @return array
+     */
+    public function jsonPaths();
 }
