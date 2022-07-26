@@ -32,7 +32,7 @@ The package will automatically register itself.
 public function boot()
 {
     $this->callAfterResolving('translator', function ($translator) {
-        $translator->addPath(__DIR__.'/../resources/lang');
+        $translator->addPath(__DIR__.'/../lang');
     });
 }
 ```
