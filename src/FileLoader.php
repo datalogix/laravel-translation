@@ -25,6 +25,7 @@ class FileLoader extends BaseFileLoader implements Loader
     protected function loadPath($path, $locale, $group)
     {
         return collect(array_merge($this->paths(), [$path]))
+            ->filter()
             ->unique()
             ->reduce(function ($output, $path) use ($locale, $group) {
                 if ($this->files->exists($full = "{$path}/{$locale}/{$group}.php")) {
@@ -45,7 +46,8 @@ class FileLoader extends BaseFileLoader implements Loader
      */
     protected function loadJsonPaths($locale)
     {
-        return collect(array_merge($this->jsonPaths, $this->paths))
+        return collect(array_merge($this->jsonPaths, $this->paths, [$this->path]))
+            ->filter()
             ->unique()
             ->reduce(function ($output, $path) use ($locale) {
                 if ($this->files->exists($full = "{$path}/{$locale}.json")) {
