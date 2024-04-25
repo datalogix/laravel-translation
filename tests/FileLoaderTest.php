@@ -11,10 +11,11 @@ class FileLoaderTest extends TestCase
     public function testLoadMethodWithNamespacesProperlyCallsLoader()
     {
         $loader = new FileLoader($files = m::mock(Filesystem::class), __DIR__);
+        $loader->addNamespace('namespace', 'bar');
+
         $files->shouldReceive('exists')->once()->with('bar/en/foo.php')->andReturn(true);
         $files->shouldReceive('exists')->once()->with(__DIR__.'/vendor/namespace/en/foo.php')->andReturn(false);
         $files->shouldReceive('getRequire')->once()->with('bar/en/foo.php')->andReturn(['foo' => 'bar']);
-        $loader->addNamespace('namespace', 'bar');
 
         $this->assertEquals(['foo' => 'bar'], $loader->load('en', 'foo', 'namespace'));
     }
@@ -31,9 +32,11 @@ class FileLoaderTest extends TestCase
     public function testLoadMethodWithPaths()
     {
         $loader = new FileLoader($files = m::mock(Filesystem::class), __DIR__);
-        $files->shouldReceive('exists')->once()->with(__DIR__.'/new-path/en/foo.php')->andReturn(true);
-        $files->shouldReceive('getRequire')->once()->with(__DIR__.'/new-path/en/foo.php')->andReturn(['foo' => 'bar']);
         $loader->addPath(__DIR__.'/new-path');
+
+        $files->shouldReceive('exists')->once()->with(__DIR__.'/en/foo.php')->andReturn(false);
+        $files->shouldReceive('exists')->once()->with(__DIR__.'/new-path/en/foo.php')->andReturn(true);
+        $files->shouldReceive('getRequire')->with(__DIR__.'/new-path/en/foo.php')->andReturn(['foo' => 'bar']);
 
         $this->assertEquals(['foo' => 'bar'], $loader->load('en', 'foo'));
     }
@@ -41,11 +44,13 @@ class FileLoaderTest extends TestCase
     public function testLoadMethodWithMultiplePaths()
     {
         $loader = new FileLoader($files = m::mock(Filesystem::class), __DIR__);
+        $loader->addPath(__DIR__.'/new-path1');
+        $loader->addPath(__DIR__.'/new-path2');
+
+        $files->shouldReceive('exists')->once()->with(__DIR__.'/en/foo.php')->andReturn(false);
         $files->shouldReceive('exists')->once()->with(__DIR__.'/new-path1/en/foo.php')->andReturn(false);
         $files->shouldReceive('exists')->once()->with(__DIR__.'/new-path2/en/foo.php')->andReturn(true);
         $files->shouldReceive('getRequire')->once()->with(__DIR__.'/new-path2/en/foo.php')->andReturn(['foo' => 'bar']);
-        $loader->addPath(__DIR__.'/new-path1');
-        $loader->addPath(__DIR__.'/new-path2');
 
         $this->assertEquals(['foo' => 'bar'], $loader->load('en', 'foo'));
     }
@@ -53,12 +58,13 @@ class FileLoaderTest extends TestCase
     public function testLoadMethdoWithInvalidPaths()
     {
         $loader = new FileLoader($files = m::mock(Filesystem::class), __DIR__);
+        $loader->addPath(__DIR__.'/new-path1');
+        $loader->addPath(__DIR__.'/new-path2');
+
         $files->shouldReceive('exists')->once()->with(__DIR__.'/new-path1/en/foo.php')->andReturn(false);
         $files->shouldReceive('exists')->once()->with(__DIR__.'/new-path2/en/foo.php')->andReturn(false);
         $files->shouldReceive('exists')->once()->with(__DIR__.'/en/foo.php')->andReturn(true);
         $files->shouldReceive('getRequire')->once()->with(__DIR__.'/en/foo.php')->andReturn(['foo' => 'bar']);
-        $loader->addPath(__DIR__.'/new-path1');
-        $loader->addPath(__DIR__.'/new-path2');
 
         $this->assertEquals(['foo' => 'bar'], $loader->load('en', 'foo'));
     }
@@ -68,6 +74,7 @@ class FileLoaderTest extends TestCase
         $loader = new FileLoader($files = m::mock(Filesystem::class), __DIR__);
         $loader->addPath(__DIR__.'/new-path', false);
 
+        $files->shouldReceive('exists')->once()->with(__DIR__.'/new-path/en.json')->andReturn(false);
         $files->shouldReceive('exists')->once()->with(__DIR__.'/en.json')->andReturn(true);
         $files->shouldReceive('get')->once()->with(__DIR__.'/en.json')->andReturn('{"foo":"bar"}');
 

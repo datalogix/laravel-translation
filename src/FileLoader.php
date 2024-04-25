@@ -3,6 +3,7 @@
 namespace Datalogix\Translation;
 
 use Illuminate\Translation\FileLoader as BaseFileLoader;
+use RuntimeException;
 
 class FileLoader extends BaseFileLoader implements Loader
 {
@@ -23,19 +24,42 @@ class FileLoader extends BaseFileLoader implements Loader
      */
     protected function loadPath($path, $locale, $group)
     {
-        if ($path === $this->path) {
-            $paths = array_merge($this->paths(), [$this->path]);
-
-            foreach ($paths as $path) {
-                $result = parent::loadPath($path, $locale, $group);
-
-                if (! empty($result)) {
-                    return $result;
+        return collect(array_merge($this->paths(), [$path]))
+            ->unique()
+            ->reduce(function ($output, $path) use ($locale, $group) {
+                if ($this->files->exists($full = "{$path}/{$locale}/{$group}.php")) {
+                    $output = array_replace_recursive($output, $this->files->getRequire($full));
                 }
-            }
-        }
 
-        return parent::loadPath($path, $locale, $group);
+                return $output;
+            }, []);
+    }
+
+    /**
+     * Load a locale from the given JSON file path.
+     *
+     * @param  string  $locale
+     * @return array
+     *
+     * @throws \RuntimeException
+     */
+    protected function loadJsonPaths($locale)
+    {
+        return collect(array_merge($this->jsonPaths, $this->paths))
+            ->unique()
+            ->reduce(function ($output, $path) use ($locale) {
+                if ($this->files->exists($full = "{$path}/{$locale}.json")) {
+                    $decoded = json_decode($this->files->get($full), true);
+
+                    if (is_null($decoded) || json_last_error() !== JSON_ERROR_NONE) {
+                        throw new RuntimeException("Translation file [{$full}] contains an invalid JSON structure.");
+                    }
+
+                    $output = array_merge($output, $decoded);
+                }
+
+                return $output;
+            }, []);
     }
 
     /**
