@@ -8,6 +8,13 @@ use RuntimeException;
 class FileLoader extends BaseFileLoader implements Loader
 {
     /**
+     * The default path for the loader.
+     *
+     * @var string
+     */
+    protected $path;
+
+    /**
      * All of the registered paths to translation files.
      *
      * @var array
