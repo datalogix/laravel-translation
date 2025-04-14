@@ -19,8 +19,8 @@
     ],
     "require": {
         "php": "^7.4|^8.0",
-        "illuminate/contracts": "^8.0|^9.0|^10.0|^11.0",
-        "illuminate/translation": "^8.0|^9.0|^10.0|^11.0"
+        "illuminate/contracts": ">=8.0 <11.39",
+        "illuminate/translation": ">=8.0 <11.39"
     },
     "require-dev": {
         "graham-campbell/testbench": "^6.1",

@@ -1,5 +1,7 @@
 # Laravel Translation
 
+> **Note:** This package has been deprecated as of Laravel [v11.39](laravel/framework/blob/v11.39.0/src/Illuminate/Translation/FileLoader.php#L191), which now includes native support for the addPath functionality.
+
 [![Latest Stable Version](https://poser.pugx.org/datalogix/laravel-translation/version)](https://packagist.org/packages/datalogix/laravel-translation)
 [![Total Downloads](https://poser.pugx.org/datalogix/laravel-translation/downloads)](https://packagist.org/packages/datalogix/laravel-translation)
 [![tests](https://github.com/datalogix/laravel-translation/workflows/tests/badge.svg)](https://github.com/datalogix/laravel-translation/actions)
@@ -11,8 +13,8 @@
 
 ## Features
 
-- Manipulate the paths of your translations as you like
-- Register many paths to translations
+-   Manipulate the paths of your translations as you like
+-   Register many paths to translations
 
 ## Installation
 
